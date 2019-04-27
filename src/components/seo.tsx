@@ -1,14 +1,8 @@
-/**
- * SEO component that queries for data with
- *  Gatsby's useStaticQuery React hook
- *
- * See: https://www.gatsbyjs.org/docs/use-static-query/
- */
-
 import React from 'react';
 import PropTypes from 'prop-types';
-import Helmet from 'react-helmet';
+import { Title, Meta } from 'react-head';
 import { useStaticQuery, graphql } from 'gatsby';
+import { useHtmlAttributes } from 'react-document-attributes';
 
 type SEOProps = {
   description: string;
@@ -35,60 +29,28 @@ function SEO({ description, lang, meta, keywords, title }: SEOProps) {
       }
     `,
   );
+  useHtmlAttributes({ lang });
 
   const metaDescription = description || site.siteMetadata.description;
 
   return (
-    <Helmet
-      htmlAttributes={{
-        lang,
-      }}
-      title={title}
-      titleTemplate={`%s | ${site.siteMetadata.title}`}
-      meta={[
-        {
-          name: `description`,
-          content: metaDescription,
-        },
-        {
-          property: `og:title`,
-          content: title,
-        },
-        {
-          property: `og:description`,
-          content: metaDescription,
-        },
-        {
-          property: `og:type`,
-          content: `website`,
-        },
-        {
-          name: `twitter:card`,
-          content: `summary`,
-        },
-        {
-          name: `twitter:creator`,
-          content: site.siteMetadata.author,
-        },
-        {
-          name: `twitter:title`,
-          content: title,
-        },
-        {
-          name: `twitter:description`,
-          content: metaDescription,
-        },
-        ...(keywords.length > 0
-          ? [
-              {
-                name: `keywords`,
-                content: keywords.join(`, `),
-              },
-            ]
-          : []),
-        ...meta,
-      ]}
-    />
+    <>
+      <Title>
+        {title} | {site.siteMetadata.title}
+      </Title>
+      <Meta name="description" content={metaDescription} />
+      <Meta name="og:title" content={title} />
+      <Meta name="og:description" content={metaDescription} />
+      <Meta name="og:type" content="website" />
+      <Meta name="twitter:card" content="summary" />
+      <Meta name="twitter:creator" content={site.siteMetadata.author} />
+      <Meta name="twitter:title" content={title} />
+      <Meta name="twitter:description" content={metaDescription} />
+      {keywords && <Meta name="keywords" content={keywords.join(', ')} />}
+      {meta.map(props => (
+        <Meta key={props.name} {...props} />
+      ))}
+    </>
   );
 }
 

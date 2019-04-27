@@ -1,7 +1,6 @@
-/**
- * Implement Gatsby's Browser APIs in this file.
- *
- * See: https://www.gatsbyjs.org/docs/browser-apis/
- */
+const React = require('react');
+const { HeadProvider } = require('react-head');
 
-// You can delete this file if you're not using it
+exports.wrapRootElement = ({ element }) => {
+  return <HeadProvider>{element}</HeadProvider>;
+};
